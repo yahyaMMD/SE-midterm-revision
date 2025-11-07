@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software Engineering — Exam Day Study Sheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #050d2b 0%, #111a42 45%, #1d215a 100%);
+      --surface: rgba(18, 26, 51, 0.72);
+      --surface-strong: rgba(18, 26, 51, 0.92);
+      --surface-border: rgba(122, 162, 255, 0.2);
+      --surface-border-strong: rgba(122, 162, 255, 0.45);
+      --ink: #f6f8ff;
+      --muted: #c1cae8;
+      --accent: #7aa2ff;
+      --accent-2: #5be7a9;
+      --accent-3: #f57dff;
+      --warn: #ffd166;
+      --danger: #ff6b6b;
+      --ok: #06d6a0;
+      --link: #8bd3ff;
+      --chip: rgba(26, 36, 71, 0.72);
+      --shadow: 0 18px 48px -24px rgba(20, 28, 61, 0.7);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(122, 162, 255, 0.4) transparent;
+    }
+
+    ::-webkit-scrollbar {
+      width: 9px;
+      height: 9px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(122, 162, 255, 0.7), rgba(91, 231, 169, 0.7));
+      border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.55 "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      letter-spacing: 0.01em;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
+      gap: 26px;
+      min-height: 100vh;
+      padding: 26px clamp(18px, 4vw, 42px);
+    }
+
+    aside {
+      position: sticky;
+      top: 26px;
+      align-self: start;
+      height: calc(100vh - 52px);
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .logo-block {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .logo-block h1 {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1.2;
+      font-weight: 600;
+      color: #f0f4ff;
+    }
+
+    .logo-block .meta {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .badge {
+      align-self: flex-start;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(122, 162, 255, 0.16);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    nav h2 {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+
+    .toc-group {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .toc-group:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      position: relative;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .toc-link::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      opacity: 0.7;
+      transform: scale(0.85);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .toc-link:hover {
+      transform: translateX(6px);
+      background: rgba(122, 162, 255, 0.08);
+    }
+
+    .toc-link:hover::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .toc-subgroup {
+      display: grid;
+      gap: 6px;
+      margin: 10px 0 12px 18px;
+      border-left: 1px solid rgba(139, 211, 255, 0.25);
+      padding-left: 14px;
+    }
+
+    .toc-subgroup a {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(216, 226, 255, 0.75);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 10px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .toc-subgroup a:hover {
+      background: rgba(91, 231, 169, 0.12);
+      color: var(--accent-2);
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding-bottom: 60px;
+    }
+
+    .hero-card {
+      background: var(--surface-strong);
+      border: 1px solid var(--surface-border-strong);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: -80px auto auto 55%;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle at center, rgba(122, 162, 255, 0.22) 0%, rgba(91, 231, 169, 0.15) 45%, transparent 70%);
+      filter: blur(2px);
+      z-index: -1;
+      opacity: 0.9;
+    }
+
+    .hero-card h1 {
+      margin: 0 0 10px;
+      font-size: clamp(32px, 4.2vw, 44px);
+      line-height: 1.1;
+      color: #f5f7ff;
+    }
+
+    .hero-card p {
+      margin: 0;
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    section {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    section > header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid rgba(122, 162, 255, 0.15);
+      padding-bottom: 12px;
+    }
+
+    section > header h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    section > header .section-chip {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(91, 231, 169, 0.14);
+      color: var(--accent-2);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      padding: 20px 22px;
+      display: grid;
+      gap: 14px;
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(120deg, rgba(122, 162, 255, 0.45), rgba(91, 231, 169, 0.35));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--accent-2);
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(122, 162, 255, 0.18);
+      color: var(--accent);
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px 18px;
+    }
+
+    .kv dt {
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .kv dd {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .columns {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: rgba(8, 15, 35, 0.65);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .callout.warn { border-left-color: var(--warn); }
+    .callout.ok { border-left-color: var(--ok); }
+    .callout.danger { border-left-color: var(--danger); }
+
+    .callout strong {
+      color: #f6f8ff;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: var(--chip);
+      color: var(--muted);
+      font-size: 13px;
+      margin: 4px 6px 0 0;
+    }
+
+    .code {
+      font-family: "JetBrains Mono", "Fira Code", "SFMono-Regular", Menlo, monospace;
+      font-size: 14px;
+      background: rgba(12, 20, 46, 0.8);
+      padding: 3px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(122, 162, 255, 0.25);
+      color: #ced7ff;
+    }
+
+    ul, ol {
+      margin: 0 0 0 18px;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    li {
+      margin: 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .flashcards {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .flashcard {
+      background: rgba(15, 21, 48, 0.8);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      border: 1px solid rgba(139, 211, 255, 0.22);
+      box-shadow: var(--shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .flashcard:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 40px -22px rgba(12, 22, 56, 0.85);
+    }
+
+    .flashcard strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: var(--accent);
+    }
+
+    .note {
+      font-size: 12px;
+      color: rgba(193, 202, 232, 0.75);
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: rgba(193, 202, 232, 0.65);
+      margin-top: 16px;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(122, 162, 255, 0), rgba(122, 162, 255, 0.4), rgba(122, 162, 255, 0));
+      margin: 6px 0 2px;
+    }
+
+    @media (max-width: 1100px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 24px 18px 48px;
+      }
+
+      aside {
+        position: relative;
+        top: 0;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 22px;
+      }
+
+      nav {
+        flex: 1 1 100%;
+      }
+    }
+
+    @media (max-width: 720px) {
+      aside {
+        padding: 18px;
+      }
+
+      .layout {
+        gap: 18px;
+      }
+
+      section > header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="logo-block">
+        <span class="badge">Exam Ready</span>
+        <h1>Software Engineering Study Sheet</h1>
+        <p class="meta">Based on Okba Tibermacine’s slides (Intro, Processes Part 1, Requirements Engineering, User Stories, UML Part 1)</p>
+      </div>
+
+      <nav>
+        <h2>Quick Navigation</h2>
+        <div class="toc-group">
+          <a class="toc-link" href="#quick-answers">A) Midterm Quick Answers</a>
+          <div class="toc-subgroup">
+            <a href="#qa-ex1">Exercise 1</a>
+            <a href="#qa-ex2">Exercise 2</a>
+            <a href="#qa-ex3">Exercise 3</a>
+            <a href="#qa-ex4">Exercise 4</a>
+          </div>
+        </div>
+        <div class="toc-group">
+          <a class="toc-link" href="#se-vs-prog">1) SE vs Programming</a>
+          <a class="toc-link" href="#nosilverbullet">2) No Silver Bullet</a>
+          <a class="toc-link" href="#swebok">3) SWEBOK Areas</a>
+          <a class="toc-link" href="#processes">4) Processes</a>
+          <a class="toc-link" href="#req-eng">5) Requirements Engineering</a>
+          <a class="toc-link" href="#user-stories">6) User Stories</a>
+          <a class="toc-link" href="#uml">7) UML</a>
+          <a class="toc-link" href="#cheats">8) Flashcards</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main>
+      <section id="hero">
+        <div class="hero-card">
+          <h1>Exam Day Study Sheet</h1>
+          <p>Distilled notes, visual cues, and exam-ready reminders to help you respond with clarity, precision, and confidence.</p>
+        </div>
+      </section>
+
+      <section id="quick-answers">
+        <header>
+          <h2>A) Last-Year Midterm — Quick Answers</h2>
+          <span class="section-chip">Hit list</span>
+        </header>
+
+        <article id="qa-ex1" class="card">
+          <header>
+            <h3>Exercise 1 — Introductory (5 pts)</h3>
+            <span class="badge-pill">Core Concepts</span>
+          </header>
+          <ol>
+            <li>
+              <strong>Git Process Flow (no commands)</strong>
+              <ul>
+                <li><b>Branching model:</b> Create feature branches from <span class="code">main</span>/<span class="code">develop</span>. Keep scope focused.</li>
+                <li><b>Work & commit:</b> Commit frequently with meaningful messages; follow standards & tests.</li>
+                <li><b>Sync & integrate:</b> Rebase/pull often to reduce drift; keep branch fresh.</li>
+                <li><b>Review:</b> Open PR → peer review (style, tests, security). Address feedback.</li>
+                <li><b>CI:</b> Automated build & tests must stay green.</li>
+                <li><b>Merge:</b> Squash/merge when approved; tidy branch.</li>
+                <li><b>Release:</b> Tag releases; use hotfix branches for urgent fixes.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Portability (NFR)</strong>
+              <p>Ability to run on multiple platforms/configurations (OS, browsers, hardware). <b>Verifiable</b> via explicit targets, e.g., “supports Windows/Linux/macOS; Chrome/Firefox/Safari” validated by compatibility tests.</p>
+            </li>
+            <li>
+              <strong>CEO wants item mid-Sprint (Scrum)</strong>
+              <p>Developers safeguard the Sprint Goal. <b>No mid-sprint scope change.</b> Product Owner re-prioritizes backlog; schedule next sprint or cancel current sprint if goal is obsolete.</p>
+            </li>
+            <li>
+              <strong>XP Principles</strong>
+              <ul>
+                <li><b>TDD:</b> Red → Green → Refactor. Guides design & ensures correctness.</li>
+                <li><b>Collective Ownership:</b> Any dev edits any code. Encourages shared quality.</li>
+                <li><b>Sustainable Pace:</b> 40h/week rhythm; prevents burnout & supports refactoring.</li>
+              </ul>
+            </li>
+          </ol>
+        </article>
+
+        <article id="qa-ex2" class="card">
+          <header>
+            <h3>Exercise 2 — Processes & Models (4 pts)</h3>
+            <span class="badge-pill">Model Picks</span>
+          </header>
+          <ol>
+            <li>
+              <strong>Why Waterfall for multi-company projects?</strong>
+              <p>Provides contract-friendly phases, exhaustive documentation, stable interfaces, predictable hand-offs, and smoother compliance across vendors.</p>
+            </li>
+            <li>
+              <strong>Choose models & justify</strong>
+              <div class="grid-2">
+                <div class="callout ok">
+                  <strong>a) Mobile Fitness + Social (startup)</strong>
+                  <div class="divider"></div>
+                  <p><u>Model:</u> <b>Agile (Scrum + XP)</b><br /><u>Why:</u> Rapid feedback, fluid scope, small iterations, user-centric learning.</p>
+                </div>
+                <div class="callout ok">
+                  <strong>b) Hospital Management</strong>
+                  <div class="divider"></div>
+                  <p><u>Model:</u> <b>RUP</b> or <b>Plan-driven with heavy validation</b><br /><u>Why:</u> Regulatory constraints, safety-critical qualities, risk-driven milestones, disciplined documentation.</p>
+                </div>
+              </div>
+            </li>
+          </ol>
+        </article>
+
+        <article id="qa-ex3" class="card">
+          <header>
+            <h3>Exercise 3 — Requirements Analysis (5 pts)</h3>
+            <span class="badge-pill">Classification</span>
+          </header>
+          <p><strong>Extract user/system requirements + classify FR/NFR</strong></p>
+          <div class="columns">
+            <div class="callout">
+              <strong>Functional Requirements (FR)</strong>
+              <ul>
+                <li>Autonomous navigation through aisles (1–3 m wide).</li>
+                <li>Locate & retrieve products from shelves (2–3 m high).</li>
+                <li>Handle objects ≤ 10 kg with ±2 cm precision.</li>
+                <li>Real-time sync with WMS (inventory, errors).</li>
+                <li>Return to docking at 20% battery.</li>
+                <li>Manual control via remote/app (Emergency Stop, navigation, pickup/release, seamless mode switch, error notifications).</li>
+              </ul>
+            </div>
+            <div class="callout">
+              <strong>Non-Functional Requirements (NFR)</strong>
+              <ul>
+                <li>Battery life ≥ 8h on single charge.</li>
+                <li>Intuitive remote/app controls.</li>
+                <li>Low-latency real-time comms with WMS.</li>
+                <li>Immediate emergency stop; safe obstacle handling.</li>
+                <li>Maintain ±2 cm precision (quality/performance).</li>
+              </ul>
+            </div>
+          </div>
+          <p class="note">Tip: Numbers (widths, heights, weights, precision, battery) are easy marks—cite them!</p>
+        </article>
+
+        <article id="qa-ex4" class="card">
+          <header>
+            <h3>Exercise 4 — UML (6 pts)</h3>
+            <span class="badge-pill">Diagram Pointers</span>
+          </header>
+          <div class="grid-2">
+            <div class="callout">
+              <strong>1) Use-Case — Office Robot Delivery</strong>
+              <ul>
+                <li><b>Actors:</b> Employee, Administrator, Elevator System.</li>
+                <li><b>Use Cases:</b> Request Delivery/Pickup, Schedule Routes, Monitor Robot, Navigate Autonomously, Use Elevators, Deliver to Department.</li>
+                <li><b>Relations:</b> Request Delivery <span class="code">&lt;&lt;include&gt;&gt;</span> Navigate, Use Elevators, Deliver.</li>
+              </ul>
+              <p class="note">Draw boundary “Office Robot System”; connect actors; factor shared steps with <span class="code">&lt;&lt;include&gt;&gt;</span>.</p>
+            </div>
+            <div class="callout">
+              <strong>2) Class Diagram — Invoicing</strong>
+              <ul>
+                <li><b>Client</b> (name, address, RC, NIF, NIS, AI)</li>
+                <li><b>Invoice</b> (reference, total, amountDue) — 1 Client, 1..* LineItem, 0..* Payment</li>
+                <li><b>LineItem</b> (productName, unitPrice, qty, totalPrice)</li>
+                <li><b>Payment</b> (date, amount)</li>
+                <li><b>PaymentAllocation</b> (amount) association between Invoice & Payment</li>
+              </ul>
+              <p class="note">Reason: Payment ↔ Invoice is many-to-many → use association class to track split amounts.</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section id="se-vs-prog">
+        <header>
+          <h2>1) Programming vs Software Engineering</h2>
+          <span class="section-chip">Mindset Shift</span>
+        </header>
+        <div class="card">
+          <ul>
+            <li><b>Program</b> = code that “works once”.</li>
+            <li><b>Software</b> = program + docs + config + data; must be <b>maintainable, adaptable, team-friendly</b>.</li>
+            <li><b>Ad-hoc vs SE:</b> “Just make it run” ↔ “Deliver value that lasts.”</li>
+          </ul>
+          <div class="callout warn">Hello World is easy; the hard part is sustainable value, change-readiness, and shared understanding via design & abstraction.</div>
+        </div>
+      </section>
+
+      <section id="nosilverbullet">
+        <header>
+          <h2>2) No Silver Bullet (Brooks)</h2>
+          <span class="section-chip">Key Distinctions</span>
+        </header>
+        <div class="columns">
+          <div class="card">
+            <h3>Essential difficulties</h3>
+            <ul>
+              <li>Complexity</li>
+              <li>Conformity</li>
+              <li>Changeability</li>
+              <li>Invisibility</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Accidental difficulties</h3>
+            <ul>
+              <li>Immature tools/IDEs</li>
+              <li>Poor docs</li>
+              <li>Clunky compilers/builds</li>
+              <li>UI quirks</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="swebok">
+        <header>
+          <h2>3) SWEBOK — Key Areas</h2>
+          <span class="section-chip">Breadth Map</span>
+        </header>
+        <div class="card">
+          <div class="columns">
+            <ul>
+              <li>Requirements</li>
+              <li>Architecture</li>
+              <li>Design</li>
+              <li>Construction</li>
+              <li>Testing</li>
+              <li>Operations</li>
+              <li>Maintenance</li>
+              <li>Config Management</li>
+              <li>Management</li>
+            </ul>
+            <ul>
+              <li>Process</li>
+              <li>Models & Methods</li>
+              <li>Quality</li>
+              <li>Security</li>
+              <li>Professional Practice</li>
+              <li>Economics</li>
+              <li>Computing Foundations</li>
+              <li>Math Foundations</li>
+              <li>Engineering Foundations</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="processes">
+        <header>
+          <h2>4) Processes: Agile • RUP • Scrum • XP</h2>
+          <span class="section-chip">Compare & contrast</span>
+        </header>
+
+        <div class="card">
+          <h3>Agile Manifesto</h3>
+          <div class="columns">
+            <ul>
+              <li>Individuals & interactions &gt; processes & tools</li>
+              <li>Working software &gt; comprehensive docs</li>
+              <li>Customer collaboration &gt; contract negotiation</li>
+              <li>Responding to change &gt; following a plan</li>
+            </ul>
+            <ul>
+              <li>Short iterations & rapid feedback</li>
+              <li>Incremental design</li>
+              <li>User involvement</li>
+              <li>Embrace change; keep simplicity</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>RUP (Iterative • Use-case driven • Architecture-centric)</h3>
+          <dl class="kv">
+            <div>
+              <dt>Phases</dt>
+              <dd>Inception • Elaboration • Construction • Transition</dd>
+            </div>
+            <div>
+              <dt>Highlights</dt>
+              <dd>Risk-driven iterations, baseline architecture before full build, measurable objectives.</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="card">
+          <h3>Scrum Framework</h3>
+          <div class="columns">
+            <div>
+              <p><b>Roles:</b> Product Owner, Scrum Master, Developers (≤10, cross-functional)</p>
+              <p><b>Artifacts:</b> Product Backlog, Sprint Backlog, Increment</p>
+              <p><b>Events:</b> Sprint Planning, Daily Scrum, Sprint Review, Retrospective</p>
+            </div>
+            <div>
+              <p><b>Values:</b> Commitment, Focus, Openness, Respect, Courage</p>
+              <p><b>Rules:</b> Fixed Sprint scope; PO curates backlog; inspect & adapt every event.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>XP (eXtreme Programming) Principles</h3>
+          <div class="columns">
+            <ul>
+              <li>Code Standards</li>
+              <li>Refactoring</li>
+              <li>Pair Programming</li>
+              <li><b>TDD</b></li>
+              <li><b>Collective Ownership</b></li>
+              <li>Continuous Integration</li>
+            </ul>
+            <ul>
+              <li>Small Releases</li>
+              <li>Onsite Customer</li>
+              <li><b>Sustainable Pace</b></li>
+              <li>System Metaphor</li>
+              <li>Simple Design</li>
+              <li>Planning Game</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="req-eng">
+        <header>
+          <h2>5) Requirements Engineering (RE)</h2>
+          <span class="section-chip">Get it right</span>
+        </header>
+        <div class="card">
+          <h3>What & Why</h3>
+          <ul>
+            <li>RE = systematic discovery, documentation, and management of requirements & constraints.</li>
+            <li>Goal: produce requirements that are <b>complete, consistent, relevant, verifiable</b>.</li>
+            <li>Poor requirements drive failures; embrace change with discipline.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Types</h3>
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Functional (FR)</strong>
+              <p>What the system shall do (services, behaviors).</p>
+            </div>
+            <div class="callout">
+              <strong>Non-Functional (NFR)</strong>
+              <p>How it should be (quality, constraints): performance, security, usability, reliability, scalability, portability, etc.</p>
+            </div>
+          </div>
+          <div class="callout warn">Write NFRs as <b>verifiable statements</b>, not vague wishes (e.g., “90% of actions &lt; 2s”).</div>
+        </div>
+        <div class="card">
+          <h3>Process (4 Activities)</h3>
+          <ol>
+            <li><b>Elicitation:</b> Plan, identify stakeholders, use interviews, scenarios, prototyping, observation, JAD, surveys, docs.</li>
+            <li><b>Analysis:</b> Spot missing/overlapping/ambiguous/unrealistic requirements; negotiate & resolve conflicts.</li>
+            <li><b>Documentation:</b> Craft SRS (IEEE 830/Volere). Qualities: correct, complete, unambiguous, verifiable, modifiable, traceable.</li>
+            <li><b>Validation:</b> Review with stakeholders for completeness, consistency, conformance, technical accuracy; iterate drafts.</li>
+          </ol>
+          <div class="callout">Principles: value orientation, engage stakeholders early/often, write clearly (SMART), capture context, ensure traceability & versioning, adapt to process model, never ignore NFRs, define Acceptance Criteria, iterate Problem→Requirement→Solution, use visuals, prioritize (MoSCoW).</div>
+        </div>
+      </section>
+
+      <section id="user-stories">
+        <header>
+          <h2>6) User Stories • AC • DoD • Acceptance Tests</h2>
+          <span class="section-chip">Scrum toolkit</span>
+        </header>
+        <div class="card">
+          <h3>Stories (3Cs & INVEST)</h3>
+          <ul>
+            <li><b>Format:</b> “As a &lt;user&gt;, I want &lt;action&gt; so that &lt;value&gt;”.</li>
+            <li><b>3Cs:</b> Card, Conversation, Confirmation (AC/tests).</li>
+            <li><b>INVEST:</b> Independent, Negotiable, Valuable, Estimable, Small, Testable.</li>
+            <li><b>NFRs in Scrum:</b> Bake into AC, technical stories, or team DoD.</li>
+          </ul>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Acceptance Criteria (per story)</h3>
+            <ul>
+              <li>Define “right thing” for the story; write before/during refinement.</li>
+              <li>Include functional + relevant NFRs.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Definition of Done (global)</h3>
+            <ul>
+              <li>Quality checklist for any backlog item.</li>
+              <li>Evolves with the team (code review, tests ≥ 80%, perf/security checks, docs, staging pass).</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Acceptance Tests (prove AC)</h3>
+          <ul>
+            <li>Executable (often BDD given/when/then); verifies AC.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="uml">
+        <header>
+          <h2>7) UML — Use Cases & Class Diagrams</h2>
+          <span class="section-chip">Visual grammar</span>
+        </header>
+        <div class="card">
+          <h3>Use-Case</h3>
+          <ul>
+            <li>Elements: <b>System</b>, <b>Actors</b> (primary/secondary), <b>Use Cases</b>, <b>Relationships</b> (association, generalization, <span class="code">&lt;&lt;include&gt;&gt;</span>, <span class="code">&lt;&lt;extend&gt;&gt;</span>).</li>
+            <li>Best practices: clear verbs/nouns, consistent abstraction, factor shared behavior, package when numerous.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Class Diagram — Essentials</h3>
+          <ul>
+            <li>Class (name | attributes | operations); visibility: <span class="code">+ - # ~</span>; <span class="code">/derived</span>, <u>static</u>.</li>
+            <li>Relationships:
+              <ul>
+                <li><b>Association</b> with multiplicities/direction.</li>
+                <li><b>Association Class</b> adds attributes to a link.</li>
+                <li><b>Aggregation</b> = shared whole–part.</li>
+                <li><b>Generalization</b> = inheritance (hollow arrow to parent).</li>
+                <li><b>Dependency</b> = dashed “uses”.</li>
+              </ul>
+            </li>
+            <li>From requirements: extract nouns → candidate classes/attributes; trim UI verbs; remove redundancy.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="cheats">
+        <header>
+          <h2>8) Flashcards — 10-second refresh</h2>
+          <span class="section-chip">Rapid recall</span>
+        </header>
+        <div class="flashcards">
+          <div class="flashcard">
+            <strong>Scrum mid-sprint change?</strong>
+            Protect the Sprint Goal; backlog reprioritized; new work enters next sprint unless current sprint is cancelled.
+          </div>
+          <div class="flashcard">
+            <strong>Portability (NFR)</strong>
+            Run seamlessly on target OS/browsers/devices; specify compatibility & prove via tests.
+          </div>
+          <div class="flashcard">
+            <strong>XP trio</strong>
+            TDD • Collective Ownership • Sustainable Pace.
+          </div>
+          <div class="flashcard">
+            <strong>RUP phases</strong>
+            Inception • Elaboration • Construction • Transition.
+          </div>
+          <div class="flashcard">
+            <strong>NFR writing</strong>
+            Use measurable metrics (e.g., 95% ≤ 2s response).
+          </div>
+          <div class="flashcard">
+            <strong>Association vs Dependency</strong>
+            Association = structural link; Dependency = “uses” (dashed).
+          </div>
+        </div>
+        <div class="footer">Deep breath. Answer succinctly. Cite numbers. Draw clean diagrams. You got this.</div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
